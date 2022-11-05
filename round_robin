@@ -1,0 +1,94 @@
+/*the arduino sketch below portray the operation in an round robin
+scheduling algorithm*/
+int call=0;
+int array[6];
+int queue[6];
+int time[6];
+int tr=0;
+int minimum;
+int count=0;
+
+void setup(){
+  pinMode(5, OUTPUT);
+  pinMode(6, OUTPUT);
+  pinMode(7, OUTPUT);
+  pinMode(8, OUTPUT);
+  pinMode(9, OUTPUT);
+  pinMode(10, OUTPUT);
+}
+
+void loop(){
+  execute_RR();
+}
+
+void blink_led()
+{
+	  digitalWrite(array[call], HIGH);
+    delay(1000);
+    digitalWrite(array[call], LOW);
+    delay(500);
+}
+
+//Round Robin
+void execute_RR()
+{
+	
+		if(count==0)
+		{
+			delay(1);
+			call=0;
+		}
+	
+		else
+		{
+			for(int v=0;v<6;v++)
+			{
+				if((time[v]!=0))
+				{
+					minimum=time[v];
+					call=v;
+					break;
+				}
+			}
+		
+    //finiding minimum
+	
+	for(int z=0;z<6;z++)
+	{
+		if((time[z]<minimum) && (time[z]!=0))
+		{
+			call=z;
+			minimum=time[z];
+		}
+	}
+	
+	
+		if(queue[call]>=5)
+		{
+			for(int a=0;a<5;a++)
+			{
+				blink_led();
+			}
+			queue[call]=queue[call]-5;
+			time[call]=trick();
+		}
+		
+		else
+		{
+			for(int b=queue[call];b>0;b--)
+			{
+				blink_led();
+			}
+			queue[call]=0;
+			count=count-1;
+			time[call]=0;
+		}
+	
+}
+ 
+}
+
+int trick(){
+  tr=tr+1;
+  return tr;
+}
